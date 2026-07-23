@@ -42,8 +42,9 @@ def display ():
 
 
 
-
-
+@app.get("/hello")
+def display2():
+    return {"saying": "Hi"}
 
 
 
