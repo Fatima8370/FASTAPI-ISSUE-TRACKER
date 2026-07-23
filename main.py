@@ -42,11 +42,6 @@ def display ():
 
 
 
-# linking routes with the main application
-# 
-from app.routes.issues import router as issues_router
-app.include_router(issues_router)
-
 
 
 
