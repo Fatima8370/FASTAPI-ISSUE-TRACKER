@@ -17,14 +17,16 @@ def get_issues():
 def create_issue(issue: IssueCreate):
     '''Create New issue'''
     issues = load_data()
-    new_issue = IssueOut(
-        id= str (uuid.uuid4()),
-        title= issue.title,
-        description= issue.description,
-        priority= issue.priority,
-            status= IssueStatus.open,
-    )
-    
+    new_issue = { # dictionary
+        "id": str(uuid.uuid4()),
+        "title": issue.title,
+        "description": issue.description,
+        "priority": issue.priority,
+        "status": IssueStatus.open
+    }
+    issues.append(new_issue)
+    save_data(issues)
+    return new_issue
 
 
 
