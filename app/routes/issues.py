@@ -1,12 +1,17 @@
 import uuid
-from fastapi import APIRouter 
+from fastapi import APIRouter, HTTPException, status
+from app.schemas import IssueCreate, IssueOut, IssueUpdate
+from app.storage import load_data, save_data
+
 # class used to group related API routes
 
 router = APIRouter(prefix= "/api/v1/issues", tags=["issues"]) # tags for swagger docs
 
-@router.get("/")
+@router.get("/", response_model=list[IssueOut])
 def get_issues():
-    return []
+    '''Retrieve all issues'''
+    issues = load_data
+    return issues
 
 
 
