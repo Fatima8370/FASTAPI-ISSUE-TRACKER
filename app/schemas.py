@@ -29,4 +29,3 @@ class IssueOut (BaseModel):
     priority: IssuePriority
     status: IssueStatus
     
-    
