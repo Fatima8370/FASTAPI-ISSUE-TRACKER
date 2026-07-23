@@ -7,7 +7,6 @@ app = FastAPI()
 
 app.include_router(issues_router)
 
-
 @app.get("/")
 def display ():
     return {"hello": "World"}
