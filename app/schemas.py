@@ -14,13 +14,14 @@ class IssuePriority(str, Enum):
 
 class IssueCreate(BaseModel):
     title: str = Field (min_length = 3, max_length = 100)
-    description: str = Field (min_length = 5, max_length = 1000)
+    description: str = Field (min_length = 5, max_length = 2000)
     priority : IssuePriority = IssuePriority.medium
     
 class IssueUpdate(BaseModel):
     title: Optional[str] = Field (default = None, max_length = 100)
-    description: Optional[str] = Field (default = None, max_length = 1000)
-    priority : Optional[IssuePriority] = IssuePriority.medium
+    description: Optional[str] = Field (default = None,min_length= 5, max_length = 2000)
+    priority : Optional[IssuePriority] = None
+    status: Optional[IssueStatus] = None
 
 class IssueOut (BaseModel):
     id: str
