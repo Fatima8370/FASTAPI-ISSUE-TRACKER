@@ -1,32 +1,50 @@
 import uuid
 from fastapi import APIRouter, HTTPException, status
-from app.schemas import IssueCreate, IssueOut, IssueUpdate, IssueStatus
+from app.schemas import IssueCreate, IssueUpdate, IssueOut
 from app.storage import load_data, save_data
 
-# class used to group related API routes
+router = APIRouter(prefix="/api/v1/issues", tags=["Issues"])
 
-router = APIRouter(prefix= "/api/v1/issues", tags=["issues"]) # tags for swagger docs
 
-@router.get("/", response_model=list[IssueOut])
+@router.get("", response_model=list[IssueOut])
 def get_issues():
-    '''Retrieve all issues'''
-    issues = load_data
+    """Get all issues."""
+    issues = load_data()
     return issues
 
-@router.post("/", response_model= "IssueOut", status_code= status.HTTP_201_CREATED)
-def create_issue(issue: IssueCreate):
-    '''Create New issue'''
+
+@router.get("/{issue_id}", response_model=IssueOut)
+def get_issue(issue_id: str):
+    """
+    Get single issue by ID
+    Raises 404 if issue not found
+    """
     issues = load_data()
-    new_issue = { # dictionary
+    for issue in issues:
+        if issue["id"] == issue_id:
+            return issue
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Issue not found")
+
+
+@router.post("", response_model=IssueOut, status_code=status.HTTP_201_CREATED)
+def create_issue(payload: IssueCreate):
+    """
+    Create new issue
+    The issue is persisted to data/issues.json
+    """
+    issues = load_data()
+
+    issue = {
         "id": str(uuid.uuid4()),
-        "title": issue.title,
-        "description": issue.description,
-        "priority": issue.priority,
-        "status": IssueStatus.open
+        "title": payload.title,
+        "description": payload.description,
+        "priority": payload.priority.value,
+        "status": "open",
     }
-    issues.append(new_issue)
+
+    issues.append(issue)
     save_data(issues)
-    return new_issue
 
-
+    return issue
 
